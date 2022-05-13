@@ -6,54 +6,59 @@ import { MongooseAutoIncrementID } from "mongoose-auto-increment-reworked";
 
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
-  firstName: {
-    type: String,
-    required: true,
+const userSchema = new Schema(
+  {
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+    },
+    username: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      trim: true,
+      default: config.userRoles.user,
+      enum: Object.values(config.userRoles),
+    },
+    deleteDate: {
+      type: Date,
+    },
+    referralId: {
+      type: String,
+    },
+    referer: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
+    referralCount: {
+      type: Number,
+      default: 0,
+    },
+    refereeCount: {
+      type: Number,
+      default: 0,
+    },
+    salt: {
+      type: String,
+    },
   },
-  lastName: {
-    type: String,
-  },
-  username: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    lowercase: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    trim: true,
-    default: config.userRoles.user,
-    enum: Object.values(config.userRoles),
-  },
-  deleteDate: {
-    type: Date,
-  },
-  referralId: {
-    type: String,
-  },
-  referer: { type: mongoose.Schema.Types.ObjectId, ref: "user" },
-  referralCount: {
-    type: Number,
-    default: 0,
-  },
-  refereeCount: {
-    type: Number,
-    default: 0,
-  },
-  salt: {
-    type: String,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 // Validate password
 userSchema.methods.validatePassword = function (password) {
