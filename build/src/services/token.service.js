@@ -22,14 +22,27 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express = __importStar(require("express"));
-const config_1 = __importDefault(require("../config/config"));
-const user_router_1 = __importDefault(require("../modules/user/user.router"));
-const router = express.Router();
-router.use(express.json({ limit: `${config_1.default.requestBodyMaxSize}mb` }));
-router.use("/user", user_router_1.default);
-exports.default = router;
+exports.verifyJwt = exports.generateJwt = void 0;
+const jwt = __importStar(require("jsonwebtoken"));
+const secret = process.env.JWT_SECRET;
+/**
+ * Generate JSON web token
+ * @param id
+ * @param email
+ * @param role
+ * @returns {*}
+ */
+const generateJwt = (id, email, role) => jwt.sign({
+    id,
+    email,
+    role,
+}, secret);
+exports.generateJwt = generateJwt;
+/**
+ * Verify JWT
+ * @returns {*}
+ * @param token
+ */
+const verifyJwt = (token) => jwt.verify(token, secret);
+exports.verifyJwt = verifyJwt;
