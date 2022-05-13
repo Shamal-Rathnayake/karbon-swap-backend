@@ -22,7 +22,7 @@ export const createUserByReferralCode = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const user = await userService.updateUser(req.body);
-    return response.successWithData(user, res);
+    return response.successWithDataAndToken(user, res);
   } catch (error) {
     return response.customError(`${error}`, res);
   }
