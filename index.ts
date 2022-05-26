@@ -26,11 +26,11 @@ mongoose.connect(`mongodb:${process.env.DATABASE}`);
 mongoose.set("debug", JSON.parse(process.env.DATABASE_DEBUG as string));
 
 // Create http server
-http.createServer(server).listen(httpPort, () => {
+/* http.createServer(server).listen(httpPort, () => {
   console.log(`HTTP server running on port: ${httpPort}`);
   initSubscriptions();
 });
-
+ */
 https.createServer(sslService(), server).listen(httpsPort, () => {
   console.log(`HTTPS server running on port: ${httpsPort}`);
   initSubscriptions();

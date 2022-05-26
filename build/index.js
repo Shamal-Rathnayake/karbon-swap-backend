@@ -9,7 +9,6 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const helmet_1 = __importDefault(require("helmet"));
 const cors_1 = __importDefault(require("cors"));
 const config_1 = __importDefault(require("./src/config/config"));
-const http_1 = __importDefault(require("http"));
 const https_1 = __importDefault(require("https"));
 const index_1 = __importDefault(require("./src/routes/index"));
 const subscription_service_1 = __importDefault(require("./src/services/subscription.service"));
@@ -26,10 +25,11 @@ server.use(config_1.default.apiUrl, index_1.default);
 mongoose_1.default.connect(`mongodb:${process.env.DATABASE}`);
 mongoose_1.default.set("debug", JSON.parse(process.env.DATABASE_DEBUG));
 // Create http server
-http_1.default.createServer(server).listen(httpPort, () => {
-    console.log(`HTTP server running on port: ${httpPort}`);
-    (0, subscription_service_1.default)();
+/* http.createServer(server).listen(httpPort, () => {
+  console.log(`HTTP server running on port: ${httpPort}`);
+  initSubscriptions();
 });
+ */
 https_1.default.createServer((0, ssl_service_1.default)(), server).listen(httpsPort, () => {
     console.log(`HTTPS server running on port: ${httpsPort}`);
     (0, subscription_service_1.default)();
