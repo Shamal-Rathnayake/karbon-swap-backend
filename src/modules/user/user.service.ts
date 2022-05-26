@@ -117,7 +117,7 @@ const getUserByReferralCode = (code: string) => {
   });
 };
 
-const getUserFromId = async (id: string) => {
+export const getUserFromId = async (id: string) => {
   return repository.findOne(userModel, {
     _id: new mongoose.Types.ObjectId(id),
     delete_date: null,
