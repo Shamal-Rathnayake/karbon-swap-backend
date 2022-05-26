@@ -46,7 +46,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllReferees = exports.login = exports.getUserById = exports.updateUser = exports.createUserByReferralCode = exports.createUser = void 0;
+exports.getUserFromId = exports.getAllReferees = exports.login = exports.getUserById = exports.updateUser = exports.createUserByReferralCode = exports.createUser = void 0;
 const config_1 = __importDefault(require("../../config/config"));
 const repository = __importStar(require("../../services/repository.service"));
 const user_model_1 = __importDefault(require("./user.model"));
@@ -81,7 +81,7 @@ const createUserByReferralCode = (body) => __awaiter(void 0, void 0, void 0, fun
 });
 exports.createUserByReferralCode = createUserByReferralCode;
 const updateUser = (body) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingUser = yield getUserFromId(body.id);
+    const existingUser = yield (0, exports.getUserFromId)(body.id);
     if (!existingUser)
         throw new Error("Invalid user id");
     const existingUserEmail = yield getUserByEmail(body.email, body.role);
@@ -100,7 +100,7 @@ const updateUser = (body) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.updateUser = updateUser;
 const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    let existingUser = yield getUserFromId(id);
+    let existingUser = yield (0, exports.getUserFromId)(id);
     if (!existingUser)
         throw new Error("Invalid user id");
     existingUser = existingUser.toObject();
@@ -120,7 +120,7 @@ const login = (body) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.login = login;
 const getAllReferees = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    let existingUser = yield getUserFromId(id);
+    let existingUser = yield (0, exports.getUserFromId)(id);
     if (!existingUser)
         throw new Error("Invalid user id");
     const referees = yield repository.findMany(user_model_1.default, {
@@ -156,6 +156,7 @@ const getUserFromId = (id) => __awaiter(void 0, void 0, void 0, function* () {
         delete_date: null,
     });
 });
+exports.getUserFromId = getUserFromId;
 const incrementRefereeCount = (id) => {
     return repository.updateOne(user_model_1.default, {
         _id: new mongoose_1.default.Types.ObjectId(id),
