@@ -83,7 +83,6 @@ const initWithdrawSubscription = async (contract) => {
     });
 
     subscription.on("data", async (event) => {
-      console.log(event);
       await updateWithdrawal(event);
     });
 
