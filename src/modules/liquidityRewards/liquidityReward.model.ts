@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import { IRewardMongoose } from "./reward.interface";
+import { ILiquidityRewardMongoose } from "./liquidityReward.interface";
 const { Schema } = mongoose;
 
 const rewardSchema = new Schema(
@@ -32,4 +32,4 @@ const rewardSchema = new Schema(
   }
 );
 
-export default mongoose.model<IRewardMongoose>("liquidity_reward", rewardSchema);
+export default mongoose.model<ILiquidityRewardMongoose>("liquidity_reward", rewardSchema);

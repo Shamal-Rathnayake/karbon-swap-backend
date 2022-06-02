@@ -298,6 +298,114 @@ export default {
       type: "function",
     },
     {
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "amount",
+          type: "uint256",
+        },
+        {
+          internalType: "address",
+          name: "receiver",
+          type: "address",
+        },
+        {
+          internalType: "string",
+          name: "recordId",
+          type: "string",
+        },
+      ],
+      name: "withdraw",
+      outputs: [
+        {
+          internalType: "bool",
+          name: "",
+          type: "bool",
+        },
+      ],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      anonymous: false,
+      inputs: [
+        {
+          components: [
+            {
+              internalType: "address",
+              name: "receiver",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "receivedAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "timestamp",
+              type: "uint256",
+            },
+            {
+              internalType: "string",
+              name: "recordId",
+              type: "string",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "foreignReserve",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nativeReserve",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "kValue",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct LiquidityPool.statusStruct",
+              name: "startValue",
+              type: "tuple",
+            },
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "foreignReserve",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "nativeReserve",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "kValue",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct LiquidityPool.statusStruct",
+              name: "endValue",
+              type: "tuple",
+            },
+          ],
+          indexed: false,
+          internalType: "struct LiquidityPool.withdrwalStruct",
+          name: "withdrawObj",
+          type: "tuple",
+        },
+      ],
+      name: "withdrawalEvent",
+      type: "event",
+    },
+    {
       inputs: [],
       name: "commissionPercentage",
       outputs: [

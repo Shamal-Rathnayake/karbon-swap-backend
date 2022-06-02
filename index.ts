@@ -31,9 +31,9 @@ http.createServer(server).listen(httpPort, () => {
   initSubscriptions();
 });
 
-https.createServer(sslService(), server).listen(httpsPort, () => {
+/* https.createServer(sslService(), server).listen(httpsPort, () => {
   console.log(`HTTPS server running on port: ${httpsPort}`);
   initSubscriptions();
-});
+}); */
 
 export default server;

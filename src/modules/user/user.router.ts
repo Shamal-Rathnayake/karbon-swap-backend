@@ -42,4 +42,12 @@ router
     controller.getAllReferees
   );
 
+router
+  .route(permissions.getBalance.path)
+  .get(
+    validator.validateHeader(permissions.getBalance.grantedUserRoles),
+    validator.validateRouteParameters(schema.id),
+    controller.getBalance
+  );
+
 export default router;

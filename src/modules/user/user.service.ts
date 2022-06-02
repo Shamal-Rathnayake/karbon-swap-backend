@@ -137,3 +137,149 @@ const incrementRefereeCount = (id: string) => {
     }
   );
 };
+
+export const getBalance = async (id: string) => {
+  let existingUser = await getUserFromId(id);
+  if (!existingUser) throw new Error("Invalid user id");
+
+  const balance = await repository.findByAggregateQuery(userModel, [
+    {
+      $facet: {
+        liquidityReward: [
+          {
+            $match: {
+              _id: new mongoose.Types.ObjectId(id),
+              deleteDate: null,
+            },
+          },
+          {
+            $lookup: {
+              from: "liquidity_rewards",
+              localField: "_id",
+              foreignField: "userId",
+              as: "liquidityReward",
+            },
+          },
+          {
+            $unwind: {
+              path: "$liquidityReward",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $group: {
+              _id: "$liquidityReward.userId",
+              liquidityBalance: {
+                $sum: "$liquidityReward.reward",
+              },
+            },
+          },
+        ],
+        swapReward: [
+          {
+            $match: {
+              _id: new mongoose.Types.ObjectId(id),
+              deleteDate: null,
+            },
+          },
+          {
+            $lookup: {
+              from: "swap_rewards",
+              localField: "_id",
+              foreignField: "userId",
+              as: "swapReward",
+            },
+          },
+          {
+            $unwind: {
+              path: "$swapReward",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $group: {
+              _id: "$swapReward.userId",
+              swapBalance: {
+                $sum: "$swapReward.reward",
+              },
+            },
+          },
+        ],
+        withdrawal: [
+          {
+            $match: {
+              _id: new mongoose.Types.ObjectId(id),
+              deleteDate: null,
+            },
+          },
+          {
+            $lookup: {
+              from: "withdrawals",
+              localField: "_id",
+              foreignField: "userId",
+              as: "withdrawal",
+            },
+          },
+          {
+            $unwind: {
+              path: "$withdrawal",
+              preserveNullAndEmptyArrays: true,
+            },
+          },
+          {
+            $match: {
+              "withdrawal.confirmed": true,
+            },
+          },
+          {
+            $group: {
+              _id: "$withdrawal.userId",
+              withdrawal: {
+                $sum: "$withdrawal.amount",
+              },
+            },
+          },
+        ],
+      },
+    },
+    {
+      $project: {
+        liquidityReward: {
+          $arrayElemAt: ["$liquidityReward", 0],
+        },
+        swapReward: {
+          $arrayElemAt: ["$swapReward", 0],
+        },
+        withdrawal: {
+          $arrayElemAt: ["$withdrawal", 0],
+        },
+      },
+    },
+    {
+      $project: {
+        userId: {
+          $cond: {
+            if: "$liquidityReward._id",
+            then: "$liquidityReward._id",
+            else: "$swapReward._id",
+          },
+        },
+        liquidity: "$liquidityReward.liquidityBalance",
+        swap: "$swapReward.swapBalance",
+        withdrawals: "$withdrawal.withdrawal",
+        totalBalance: {
+          $subtract: [
+            {
+              $add: ["$liquidityReward.liquidityBalance", "$swapReward.swapBalance"],
+            },
+            "$withdrawal.withdrawal",
+          ],
+        },
+      },
+    },
+  ]);
+
+  if (balance.length <= 0) return null;
+
+  return balance[0];
+};
