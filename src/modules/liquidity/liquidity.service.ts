@@ -3,7 +3,7 @@ import * as repository from "../../services/repository.service";
 import { getUserFromId } from "../user/user.service";
 import userModel from "../user/user.model";
 import mongoose from "mongoose";
-import { addReward } from "../rewards/reward.controller";
+import { addReward } from "../liquidityRewards/liquidityReward.controller";
 import BigNumber from "bignumber.js";
 import config from "../../config/config";
 
@@ -23,6 +23,9 @@ export const addLiquidity = async (body) => {
 
   const existingUser = await getUserFromId(userId);
   if (!existingUser) throw new Error("Invalid user id");
+
+  const existingRecord = await getRecordByTxHash(transactionHash);
+  if (existingRecord) throw new Error("Record already exists");
 
   const liquidityRecord = new LiquidityModel({
     transactionHash,
@@ -153,4 +156,10 @@ const issueReward = async (userId, commission, recordId) => {
       });
     }
   }
+};
+
+const getRecordByTxHash = async (hash: string) => {
+  return repository.findOne(LiquidityModel, {
+    transactionHash: hash,
+  });
 };

@@ -48,8 +48,17 @@ export const getUserById = async (req, res) => {
 
 export const getAllReferees = async (req, res) => {
   try {
-    const user = await userService.getAllReferees(req.params.id);
-    return response.successWithData(user, res);
+    const referees = await userService.getAllReferees(req.params.id);
+    return response.successWithData(referees, res);
+  } catch (error) {
+    return response.customError(`${error}`, res);
+  }
+};
+
+export const getBalance = async (req, res) => {
+  try {
+    const balance = await userService.getBalance(req.params.id);
+    return response.successWithData(balance, res);
   } catch (error) {
     return response.customError(`${error}`, res);
   }

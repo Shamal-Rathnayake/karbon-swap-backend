@@ -1,4 +1,4 @@
-import * as rewardService from "./reward.service";
+import * as rewardService from "./liquidityReward.service";
 import * as response from "../../services/response.service";
 
 export const addReward = async (body) => {

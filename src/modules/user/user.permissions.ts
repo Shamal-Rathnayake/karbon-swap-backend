@@ -39,4 +39,8 @@ export default {
     path: "/referees/:id",
     grantedUserRoles: [userRoles.superAdmin, userRoles.admin, userRoles.user],
   },
+  getBalance: {
+    path: "/balance/:id",
+    grantedUserRoles: [userRoles.superAdmin, userRoles.admin, userRoles.user],
+  },
 };

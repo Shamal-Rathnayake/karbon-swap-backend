@@ -1,4 +1,4 @@
-export interface IReward {
+export interface ILiquidityReward {
   _id: string;
   userId: string;
   liquidityRecord: string;
@@ -6,4 +6,4 @@ export interface IReward {
   percentage: number;
   level: number;
 }
-export interface IRewardMongoose extends IReward, Document {}
+export interface ILiquidityRewardMongoose extends ILiquidityReward, Document {}
